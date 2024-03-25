@@ -63,7 +63,7 @@ const clickCard = (event) => {
             matches++;
             if(matches === 8) {
                 score++;
-                console.log("winner" + score);
+                scoreboard.innerText = `Score : ${score}`;
             }
             firstPick = null;
             isPaused = false;
@@ -98,6 +98,12 @@ const resetGame = () => {
 
 window.addEventListener('DOMContentLoaded', function() {
     const game = document.getElementById("game");
-    console.log(game);
+    const scoreboard = document.getElementById("scoreboard");
+    console.log(scoreboard);
+
+    console.log(score);
+
+    scoreboard.innerText = `Score : ${score}`;
+
     resetGame();
 })
