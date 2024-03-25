@@ -4,6 +4,15 @@
 }
 
 body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    max-width: 80vw;
+    min-height: 98vh;
+    margin: 0 auto;
+    padding: 1rem;
+
     background-color: var(--background);
     background-image:  linear-gradient(
         var(--background-accent-2) 50%,
@@ -15,24 +24,24 @@ body {
     background-repeat: no-repeat;
     background-size: 100% 30px;
     background-position: top left, bottom left;
-    min-height: 98vh;
-
+    
     font-family: "Animal Crossing";
     text-transform: uppercase;
     letter-spacing: 0.1rem;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    padding: 1rem;
 }
 
 header {
-    margin-block: 2rem;
+    margin-block: 1.5rem;
+
     display: flex;
     flex-direction: column;
-    align-items: center;
+}
+
+header h1 {
+    margin: 1rem;
+
+    font-size: 4rem;
+    text-align: center;
 }
 
 /* BUTTON */
@@ -48,19 +57,23 @@ header {
 
 button {
     cursor: pointer;
-    outline: none;
-    border: none;
-    background-color: var(--light);
+
     width: 400px;
     height: 70px;
     border-radius: 30px;
+    margin-block: 1rem;
+    
+    outline: none;
+    border: none;
+    
+    background-color: var(--light);
+    background-size: 100% 100%;
+    box-shadow: 0 0 0 7px var(--light) inset;
+
     font-size: 1.5rem;
     font-family: "Animal Crossing";
     font-weight: 600;
     color: var(--text);
-    background-size: 100% 100%;
-    box-shadow: 0 0 0 7px var(--light) inset;
-    margin-bottom: 15px;
 }
 
 button:hover {
@@ -87,4 +100,59 @@ button:hover {
     100% {
         background-position: 400px 0;
     }
+}
+
+
+/* @media (max-width: 768px) {
+    body {
+        
+    }
+    
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+} */
+
+main {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#game {
+    width: 100%;
+    
+    display: grid;
+    grid-template-columns: repeat(2, 7rem);
+    grid-template-rows: repeat(8, 7rem);
+    gap: 1rem;
+    justify-content: space-around;
+}
+
+main section .card {
+    cursor: pointer;
+    background-color: var(--background-accent-2);
+    box-shadow: 0 3px 10px var(--background-accent);
+    border-radius: 30px;
+
+    position: relative;
+    overflow: hidden;
+}
+@media (min-width: 769px) {
+    header {
+        flex-direction: row;
+        justify-content: space-around;
+        align-self: normal;
+    }
+    
+    #game {
+        grid-template-columns: repeat(4, 10rem);
+        grid-template-rows: repeat(4, 10rem);
+        gap: 2rem;
+        justify-content: center;
+    }
+    
 }
