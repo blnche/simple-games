@@ -1,12 +1,11 @@
 const pokemonAPIBaseUrl = "https://pokeapi.co/api/v2/pokemon/";
 
-window.addEventListener('DOMContentLoaded', function() {
-    const game = document.getElementById("game");
-    console.log(game);
-})
+let isPaused = false;
+let firstPick;
+let matches;
+let score = 0;
 
-
-const loadPokemon = async () => {
+const loadVillager = async () => {
 
     const randomIds = new Set(); //same as array but takes care of duplicates
 
@@ -15,32 +14,90 @@ const loadPokemon = async () => {
         randomIds.add(randomNumber);
     }
 
-    const pokemonPromises = [...randomIds].map( id => fetch(pokemonAPIBaseUrl + id)); //three dots = spread operator, allow to convert set to array
-    const responses = await Promise.all(pokemonPromises);
+    const villagerPromises = [...randomIds].map( id => fetch(pokemonAPIBaseUrl + id)); //three dots = spread operator, allow to convert set to array
+    const responses = await Promise.all(villagerPromises);
 
     return await Promise.all(responses.map(res => res.json()));
 }
 
-const displayPokemon = (pokemon) => {
-    console.log("Displaying Pokemons");
-    pokemon.sort( _ => Math.random() - 0.5);
-    const pokemonHTML = pokemon.map(pokemon => {
+const displayVillager = (villager) => {
+    villager.sort( _ => Math.random() - 0.5);
+    const villagerHTML = villager.map(villager => {
         return `
-            <div class="card"> 
+            <div class="card" onclick="clickCard(event)" data-villagername="${villager.name}"> 
                 <div class="front"></div>
                 <div class="back rotated">
-                    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}"/>
-                    <h2> ${pokemon.name}</h2>
+                    <img src="${villager.sprites.front_default}" alt="${villager.name}"/>
+                    <h2> ${villager.name}</h2>
                 </div>
             </div>
         `
     }).join('');
-    game.innerHTML = pokemonHTML;
+    game.innerHTML = villagerHTML;
 }
 
-const resetGame = async () => {
-    const pokemon = await loadPokemon();
-    displayPokemon([...pokemon, ...pokemon]);
+const clickCard = (event) => {
+    const villagerCard = event.currentTarget;
+    const [front, back] = getFrontAndBackCard(villagerCard);
+
+    if(front.classList.contains('rotated') || isPaused) return;
+
+    isPaused = true;
+    
+    rotateElements([front, back]);
+    if(!firstPick) {
+        firstPick = villagerCard;
+        isPaused = false;
+    } else {
+        const secondVillagerName = villagerCard.dataset.villagername;
+        const firstVillagerName = firstPick.dataset.villagername;
+
+        if(firstVillagerName !== secondVillagerName) {
+            const [firstFront, firstBack] = getFrontAndBackCard(firstPick);
+            setTimeout(() => {
+                rotateElements([front, back, firstFront, firstBack]);
+                firstPick = null;
+                isPaused = false;
+            }, 500)
+        } else {
+            matches++;
+            if(matches === 8) {
+                score++;
+                console.log("winner" + score);
+            }
+            firstPick = null;
+            isPaused = false;
+        }
+    }
+
 }
 
-resetGame();
+const rotateElements = (elements) => {
+    if(typeof elements !== 'object' || !elements.length) return;
+
+    elements.forEach(element => element.classList.toggle('rotated'));
+}
+
+const getFrontAndBackCard = (card) => {
+    const front = card.querySelector(".front");
+    const back = card.querySelector(".back");
+    return [front, back];
+}
+
+const resetGame = () => {
+    game.innerHTML = '';
+    isPaused = true;
+    firstPick = null;
+    matches = 0;
+    setTimeout(async () => {
+        const villager = await loadVillager();
+        displayVillager([...villager, ...villager]);
+        isPaused = false;
+    }, 200)
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    const game = document.getElementById("game");
+    console.log(game);
+    resetGame();
+})
