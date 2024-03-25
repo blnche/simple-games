@@ -3,6 +3,12 @@
     src: url('../fonts/Animal-Crossing-Wild-World.ttf');
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -42,6 +48,7 @@ header h1 {
 
     font-size: 4rem;
     text-align: center;
+    line-height: 1;
 }
 
 /* BUTTON */
@@ -126,26 +133,62 @@ main {
     width: 100%;
     
     display: grid;
-    grid-template-columns: repeat(2, 7rem);
-    grid-template-rows: repeat(8, 7rem);
+    grid-template-columns: repeat(4, 5rem);
+    grid-template-rows: repeat(4, 5rem);
     gap: 1rem;
     justify-content: space-around;
 }
 
 main section .card {
     cursor: pointer;
+
     background-color: var(--background-accent-2);
     box-shadow: 0 3px 10px var(--background-accent);
     border-radius: 30px;
 
     position: relative;
     overflow: hidden;
+
+    transform-style: preserve-3d;
 }
+
+main section .card h2 {
+    margin: 0;
+}
+
+.front, .back {
+    height: 100%;
+    width: 100%;
+
+    backface-visibility: visible;
+    transition: transform 0.5s;
+}
+
+.front {
+    background-image: url('../images/NH-Trees-cherry-blossom_tree.webp');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.rotated {
+    transform: rotateY(180deg);
+}
+
+footer {
+    margin-block: 1rem;
+}
+
+
+
+
+/* DESKTOP */
 @media (min-width: 769px) {
     header {
+        width: 80vw;
         flex-direction: row;
         justify-content: space-around;
-        align-self: normal;
+        align-items: center;
     }
     
     #game {

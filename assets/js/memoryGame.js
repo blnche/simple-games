@@ -27,7 +27,11 @@ const displayPokemon = (pokemon) => {
     const pokemonHTML = pokemon.map(pokemon => {
         return `
             <div class="card"> 
-                <h2> ${pokemon.name}</h2>
+                <div class="front"></div>
+                <div class="back rotated">
+                    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}"/>
+                    <h2> ${pokemon.name}</h2>
+                </div>
             </div>
         `
     }).join('');
