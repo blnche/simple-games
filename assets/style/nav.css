@@ -1,0 +1,22 @@
+header button > img {
+    width: 2rem;
+}
+
+.navButton {
+    width: 5rem;
+    padding: 1rem;
+}
+
+nav {
+    display: none;
+}
+
+@media (min-width: 769px) {
+    .navButton {
+        display: none;
+    }
+
+    nav {
+        display: block;
+    }
+}

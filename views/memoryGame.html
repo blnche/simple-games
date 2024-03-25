@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Games</title>
     <link rel="stylesheet" href="../assets/style/style.css">
     <script src="../assets/js/memoryGame.js"></script>
+    <script type="module" src="../assets/js/main.js"></script>
 </head>
 <body>
     <header>
         <h1>Match Villagers</h1>
         <p id="scoreboard"></p>
         <button onclick="resetGame()">Reset</button>
-        <nav>
+        <button class="navButton" id="toggleNavBtn">
+            <img src="../assets/images/NH-Trees-cherry-blossom_tree.webp" alt="">
+        </button>
+        <nav id="nav">
             <ul>
                 <li>
                     <a href="views/memoryGame.html">Memory Game</a>
