@@ -1,0 +1,27 @@
+#gameBoard {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.column {
+    border: 1px solid black;
+    height: 8rem;
+    width: 5rem;
+    
+    margin: 1rem;
+}
+
+.hidden {
+    color: transparent;
+}
+
+.won {
+    background-color: gray;
+}

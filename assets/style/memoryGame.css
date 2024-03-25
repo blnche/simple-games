@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "Animal Crossing";
+    src: url('../fonts/Animal-Crossing-Wild-World.ttf');
+}
+
+* {
+    font-family: "Animal Crossing";
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
