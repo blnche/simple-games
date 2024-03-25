@@ -3,8 +3,222 @@
     src: url('../fonts/Animal-Crossing-Wild-World.ttf');
 }
 
-* {
+html, body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    max-width: 80vw;
+    min-height: 98vh;
+    margin: 0 auto;
+    padding: 1rem;
+
+    background-color: var(--background);
+    background-image:  linear-gradient(
+        var(--background-accent-2) 50%,
+        var(--background-accent) 50%
+    ), linear-gradient(
+        var(--background-accent) 50%,
+        var(--background-accent-2) 50%
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 30px;
+    background-position: top left, bottom left;
+    
     font-family: "Animal Crossing";
     text-transform: uppercase;
     letter-spacing: 0.1rem;
+}
+
+header {
+    margin-block: 1.5rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header h1 {
+    margin: 1rem;
+
+    font-size: 4rem;
+    text-align: center;
+    line-height: 1;
+}
+
+/* BUTTON */
+
+:root {
+    --background: #E5FFB3;
+    --background-accent: #DBF8A3;
+    --background-accent-2: #BDE66E;
+    --light: #92DE34;
+    --dark: #69BC22;
+    --text: #025600;
+}
+
+button {
+    cursor: pointer;
+
+    width: 200px;
+    height: 70px;
+    border-radius: 30px;
+    margin-block: 1rem;
+    
+    outline: none;
+    border: none;
+    
+    background-color: var(--light);
+    background-size: 100% 100%;
+    box-shadow: 0 0 0 7px var(--light) inset;
+
+    font-size: 1.5rem;
+    font-family: "Animal Crossing";
+    font-weight: 600;
+    color: var(--text);
+}
+
+button:hover {
+    background-image: linear-gradient(
+        145deg,
+        transparent 10%,
+        var(--dark) 10% 20%,
+        transparent 20% 30%,
+        var(--dark) 30% 40%,
+        transparent 40% 50%,
+        var(--dark) 50% 60%,
+        transparent 60% 70%,
+        var(--dark) 70% 80%,
+        transparent 80% 90%,
+        var(--dark) 90% 100%
+    );
+    animation: background 3s linear infinite;
+}
+
+@keyframes background {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 400px 0;
+    }
+}
+
+
+/* @media (max-width: 768px) {
+    body {
+        
+    }
+    
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+} */
+
+main {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#game {
+    width: 100%;
+    
+    display: grid;
+    grid-template-columns: repeat(4, 5rem);
+    grid-template-rows: repeat(4, 5rem);
+    gap: 1rem;
+    justify-content: space-around;
+}
+
+.card {
+    cursor: pointer;
+
+    background-color: var(--background-accent-2);
+    box-shadow: 0 3px 10px var(--background-accent);
+    border-radius: 30px;
+
+    position: relative;
+    transform-style: preserve-3d;
+    overflow: hidden;
+}
+
+.card h2 {
+    margin: 0;
+    font-size: 1rem;
+
+    position: absolute;
+    bottom: -25%;
+
+    z-index: 9999;
+}
+
+.front, .back {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+
+    height: 100%;
+    width: 100%;
+
+    backface-visibility: hidden;
+    transition: transform 0.5s;
+}
+
+.front {
+    background-image: url('../images/NH-Trees-cherry-blossom_tree.webp');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.back img {
+    width: 4rem;
+}
+
+.rotated {
+    transform: rotateY(180deg);
+}
+
+footer {
+    margin-block: 1rem;
+}
+
+
+/* DESKTOP */
+@media (min-width: 769px) {
+    header {
+        width: 80vw;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    
+    #game {
+        grid-template-columns: repeat(4, 10rem);
+        grid-template-rows: repeat(4, 10rem);
+        gap: 2rem;
+        justify-content: center;
+    }
+
+    .card .back h2 {
+        font-size: 2rem;
+        position: initial;
+    }
+
+    .card .back img {
+        width: 5rem;
+    }
+    
 }
