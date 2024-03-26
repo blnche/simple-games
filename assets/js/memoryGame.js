@@ -6,7 +6,11 @@ const headers = new Headers();
 headers.append('X-API-KEY', apiKey);
 headers.append('Accept-Version', '1.0.0');
 
-const request = new Request(animalcrossingAPIBaseUrl, {
+const urlWithQuery = new URL(animalcrossingAPIBaseUrl);
+urlWithQuery.searchParams.append('game', 'WW');
+console.log(urlWithQuery);
+
+const request = new Request(urlWithQuery, {
     method:'GET',
     headers: headers
 });
@@ -30,7 +34,7 @@ const loadVillager = async () => {
         const randomIds = new Set(); 
     
         while(randomIds.size < 8 ){
-            const randomNumber = Math.ceil(Math.random() * 488);
+            const randomNumber = Math.ceil(Math.random() * 150);
             randomIds.add(randomNumber);
         }
     
