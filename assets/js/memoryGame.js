@@ -1,4 +1,15 @@
-const pokemonAPIBaseUrl = "https://pokeapi.co/api/v2/pokemon/";
+// const pokemonAPIBaseUrl = "https://pokeapi.co/api/v2/pokemon/";
+const animalcrossingAPIBaseUrl = "https://api.nookipedia.com/villagers"
+const apiKey = "88bd6425-126c-436d-b101-b216efd3160e";
+
+const headers = new Headers();
+headers.append('X-API-KEY', apiKey);
+headers.append('Accept-Version', '1.0.0');
+
+const request = new Request(animalcrossingAPIBaseUrl, {
+    method:'GET',
+    headers: headers
+});
 
 let isPaused = false;
 let firstPick;
@@ -7,27 +18,50 @@ let score = 0;
 
 const loadVillager = async () => {
 
-    const randomIds = new Set(); //same as array but takes care of duplicates
+    try {
+        const response = await fetch(request);
+        if(!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-    while(randomIds.size < 8 ){
-        const randomNumber = Math.ceil(Math.random() * 150);
-        randomIds.add(randomNumber);
+        const data = await response.json();
+        console.log(data);
+
+        const randomIds = new Set(); 
+    
+        while(randomIds.size < 8 ){
+            const randomNumber = Math.ceil(Math.random() * 488);
+            randomIds.add(randomNumber);
+        }
+    
+        const selectedVillagers = [];
+    
+        for(const id of randomIds) {
+            const index = id - 1;
+            if(index >= 0 && index < data.length) {
+                selectedVillagers.push(data[index])
+            }
+        }
+    
+        console.log(selectedVillagers);
+        console.log(selectedVillagers[1].image_url);
+    
+        return selectedVillagers;
+
+    } catch (error) {
+        console.log('error in loadVillager');
     }
-
-    const villagerPromises = [...randomIds].map( id => fetch(pokemonAPIBaseUrl + id)); //three dots = spread operator, allow to convert set to array
-    const responses = await Promise.all(villagerPromises);
-
-    return await Promise.all(responses.map(res => res.json()));
 }
 
 const displayVillager = (villager) => {
+    console.log(villager);
     villager.sort( _ => Math.random() - 0.5);
     const villagerHTML = villager.map(villager => {
         return `
             <div class="card" onclick="clickCard(event)" data-villagername="${villager.name}"> 
                 <div class="front"></div>
                 <div class="back rotated">
-                    <img src="${villager.sprites.front_default}" alt="${villager.name}"/>
+                    <img src="${villager.image_url}" alt="${villager.name}"/>
                     <h2> ${villager.name}</h2>
                 </div>
             </div>
@@ -99,9 +133,9 @@ const resetGame = () => {
 window.addEventListener('DOMContentLoaded', function() {
     const game = document.getElementById("game");
     const scoreboard = document.getElementById("scoreboard");
-    console.log(scoreboard);
+    // console.log(scoreboard);
 
-    console.log(score);
+    // console.log(score);
 
     scoreboard.innerText = `Score : ${score}`;
 
