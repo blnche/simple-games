@@ -65,7 +65,9 @@ const displayVillager = (villager) => {
             <div class="card" onclick="clickCard(event)" data-villagername="${villager.name}"> 
                 <div class="front"></div>
                 <div class="back rotated">
-                    <img src="${villager.image_url}" alt="${villager.name}"/>
+                    <div class="imgWrapper">
+                        <img src="${villager.image_url}" alt="${villager.name}"/>
+                    </div>
                     <h2> ${villager.name}</h2>
                 </div>
             </div>
