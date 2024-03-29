@@ -47,27 +47,17 @@ main {
     overflow: hidden;
 }
 
-.card h2 {
-    margin: 0;
-    font-size: 1rem;
-
-    position: absolute;
-    bottom: -25%;
-
-    z-index: 9999;
-}
-
 .front, .back {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    
     position: absolute;
-
+    
     height: 100%;
     width: 100%;
-
+    
     backface-visibility: hidden;
     transition: transform 0.5s;
 }
@@ -80,7 +70,17 @@ main {
 }
 
 .back img {
-    width: 4rem;
+    width: 2rem;
+}
+
+.back h2 {
+    margin: 0;
+    font-size: 1rem;
+
+    position: absolute;
+    bottom: -2%;
+
+    z-index: 9999;
 }
 
 .rotated {
@@ -107,13 +107,12 @@ footer {
         justify-content: center;
     }
 
-    .card .back h2 {
+    .back h2 {
         font-size: 2rem;
-        position: initial;
     }
 
-    .card .back img {
-        width: 5rem;
+    .back img {
+        width: 3rem;
     }
     
 }
