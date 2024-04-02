@@ -1,8 +1,7 @@
 // generate a board with numbers already validated, then have some put in a set for the one shown at start of the game, and then validate the board at the end
 
-//let numberSelected = null; //digits selected on screen to write in tile
-//let tileSelected = null; //tile selected to be written on
-
+let numberSelected = null; //digits selected on screen to write in tile
+let tileSelected = null; //tile selected to be written on
 
 let counter;
 
@@ -33,6 +32,11 @@ const shuffle = array => {
     }
 
     return newArray;
+}
+
+const range = (start, end) => {
+    const length = end - start + 1; // + 1 makes it inclusive
+    return Array.from( {length}, ( _ , i) => start + i); // creates new array : first argument = length of array, second argument = mapping function & _ means we don't use the parameter element, only the index represented by i
 }
 
 // board = sudoku board generated 
@@ -92,7 +96,8 @@ const nextEmptyCell = board => {
     return false; // all cells filled
 };
 
-const fillBoard = baseBoard => {
+const fillBoard = (baseBoard) => {
+
     const emptyCell = nextEmptyCell(baseBoard); // returns false or emptyCell with row and col value
 
     if(!emptyCell) return baseBoard; // board filled
@@ -110,81 +115,133 @@ const fillBoard = baseBoard => {
             // recursive call failed then reset value to 0
             baseBoard[ emptyCell.rowIndex][ emptyCell.colIndex] = 0;
         }
+
     }
 
     return false; // recursive call failed for all numbers, paths not ok, no valid solution
 }
 
 // creates board with valid solution
-const newSolvedBoard = _ => {
+const newSolvedBoard = game => {
     const newBoard = baseBoard.map(row => row.slice());
 
-    fillBoard(newBoard);
+    fillBoard(newBoard, game);
 
     // attributes each element of board to game section
-    const game = document.getElementById('board');
-    
     newBoard.forEach( (row, rowIndex) => {
 
-        row.forEach( col => {
+        row.forEach( (col, colIndex) => {
 
             const number = document.createElement('div');
             number.setAttribute('class', 'tile');
-            number.setAttribute('id', rowIndex+'-'+col);
+            number.setAttribute('id', rowIndex+'-'+colIndex);
             number.innerText = col;
         
             game.appendChild(number);
         });
     });
-    
     return newBoard;
 }
 
-
-
-//those will be use when generating board & validating board
-const validateBoard = (board) => {
-    const rowSet = new Set();
-    const columnSet = new Set();
-    const boxSet = new Set();
-
-    for (let i = 0; i < board.length; i++) {
-        const row = board[i];
-        
-        for (let j = 0; j< row.length; j++) {
-            const rowNumber = row[j];
-            const columnNumber = board[j][i];
-            const boxNumber = board[3 * Math.floor(i / 3) + Math.floor(j / 3)][(i * 3) % 9 + (j % 3)];
-            
-            
-            if(rowNumber !== '.') {
-                if (rowSet.has(rowNumber)) return false;
-                rowSet.add(rowNumber);
-            }
-            
-            if(columnNumber !== '.') {
-                if(columnSet.has(columnNumber)) return false;
-                columnSet.add(columnNumber);
-            }
-            
-            if(boxNumber !== '.') {
-                if(boxSet.has(boxNumber)) return false;
-                boxSet.add(boxNumber);
-            }
-        }
-        
-        rowSet.clear();
-        columnSet.clear();
-        boxSet.clear();
-    }
+const removeValue = (baseBoard, holes) => {
+    const divs = Array.from(document.getElementsByClassName('tile'));
+    const removedValues = [];
     
-    return true;
+    while( removedValues.length < holes ) {
+        const value = Math.floor(Math.random() * 81);
+        const randomRowIndex = Math.floor(value / 9);
+        const randomColIndex = value % 9;
+        
+        if (!baseBoard[ randomRowIndex ]) continue // prevents cloning error
+        if ( baseBoard[ randomRowIndex ][ randomColIndex ] == 0) continue // if cell already empty restart loop
+        
+        removedValues.push({
+            rowIndex: randomRowIndex,
+            colIndex: randomColIndex,
+            val: baseBoard[ randomRowIndex ][ randomColIndex ]
+        });
+        
+        baseBoard[ randomRowIndex ][ randomColIndex ] = 0;
+
+        const proposedBoard = baseBoard.map( row => row.slice());
+
+        if (!fillBoard(proposedBoard)) {
+            baseBoard[ randomRowIndex ][ randomColIndex ] = removedValues.pop().val;
+        }
+
+    }
+
+    removedValues.forEach( value => {
+
+        divs.forEach( div => {
+
+            if (div.getAttribute('id') == `${value.rowIndex}`+'-'+`${value.colIndex}`) {
+                div.innerText = '';
+            }
+        });
+    });
+    return [removedValues, baseBoard];
 }
 
+const multiplePossibleSolutions = (boardToCheck) => {
+    const possibleSolutions = [];
+    const emptyCellArray = emptyCellCoords(boardToCheck);
 
+    for (let index = 0; index < emptyCellArray.length; index++) {
+        let emptyCellClone = [...emptyCellArray];
+
+        const startingPoint = emptyCellClone.splice(index, 1);
+
+        emptyCellClone.unshift( startingPoint[0]);
+
+        let thisSolution = fillFromArray(boardToCheck.map( row => row.slice()), emptyCellClone);
+        possibleSolutions.push(thisSolution.join());
+
+        if ( Array.from(new Set(possibleSolutions)).length > 1) return true;
+    }
+    return false;
+}
+
+const fillFromArray = (baseBoard, emptyCellArray) => {
+    let holeCounter;
+    const emptyCell = nextStillEmptyCell(baseBoard, emptyCellArray);
+
+    if (!emptyCell) return baseBoard;
+
+    for (num of shuffle(numArray)) {
+        holeCounter++
+        if( holeCounter > 60_000_000) throw new Error ("Hole Timeout");
+
+        if (safeToPlace(baseBoard, emptyCell, num)) {
+            baseBoard[ emptyCell.rowIndex ][ emptyCell.colIndex ] = num;
+            if (fillFromArray(baseBoard, emptyCellArray)) return baseBoard;
+    
+            baseBoard[ emptyCell.rowIndex ][ emptyCell.colIndex ] = 0;
+        }
+    }
+    return false;
+}
+
+const nextStillEmptyCell = (baseBoard, emptyCellArray) => {
+    for (coords of emptyCellArray) {
+        if (baseBoard[ coords.row ][ coords.col ] === 0) return {rowIndex : coords.row, colIndex: coords.col};
+    }
+    return false;
+}
+
+const emptyCellCoords = (baseBoard) => {
+    const listOfEmptyCells = [];
+    for (const row of range (0,8)) {
+        for (const col of range (0,8)) {
+            if (baseBoard[row][col] === 0) listOfEmptyCells.push( {row, col})
+        }
+    }
+    return listOfEmptyCells;
+}
 
 window.addEventListener('DOMContentLoaded', () => {
-    
+    const game = document.getElementById('board');
+
     //once level is selected and genrerat a board is clicked, radio button = disabled
     
     
@@ -205,6 +262,63 @@ window.addEventListener('DOMContentLoaded', () => {
     //         levelSelected = event.target.id;
     //     }));
 
-    const solvedBoard = newSolvedBoard();
-    console.log(validateBoard(solvedBoard));
+    // const solvedBoard = newSolvedBoard();
+    //those will be use when generating board & validating board
+    // const validateBoard = (board) => {
+    //     const rowSet = new Set();
+    //     const columnSet = new Set();
+    //     const boxSet = new Set();
+
+    //     for (let i = 0; i < board.length; i++) {
+    //         const row = board[i];
+            
+    //         for (let j = 0; j< row.length; j++) {
+    //             const rowNumber = row[j];
+    //             const columnNumber = board[j][i];
+    //             const boxNumber = board[3 * Math.floor(i / 3) + Math.floor(j / 3)][(i * 3) % 9 + (j % 3)];
+                
+                
+    //             if(rowNumber !== '.') {
+    //                 if (rowSet.has(rowNumber)) return false;
+    //                 rowSet.add(rowNumber);
+    //             }
+                
+    //             if(columnNumber !== '.') {
+    //                 if(columnSet.has(columnNumber)) return false;
+    //                 columnSet.add(columnNumber);
+    //             }
+                
+    //             if(boxNumber !== '.') {
+    //                 if(boxSet.has(boxNumber)) return false;
+    //                 boxSet.add(boxNumber);
+    //             }
+    //         }
+            
+    //         rowSet.clear();
+    //         columnSet.clear();
+    //         boxSet.clear();
+    //     }
+        
+    //     return true;
+    // }
+    
+    
+    const newStartingBoard = (holes) => {
+        try {
+            counter = 0;
+            let solvedBoard = newSolvedBoard(game);
+            let [removedValues, baseBoard] = removeValue( solvedBoard.map( row => row.slice()), holes); // not working
+            
+            return [removedValues, baseBoard, solvedBoard];
+        } catch (error) {
+            console.log(error);
+            return newStartingBoard(holes);
+        }
+    }
+
+    newStartingBoard(60);
 })
+
+
+
+
