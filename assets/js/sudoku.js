@@ -1,7 +1,9 @@
 // generate a board with numbers already validated, then have some put in a set for the one shown at start of the game, and then validate the board at the end
 
-let numberSelected = null; //digits selected on screen to write in tile
-let tileSelected = null; //tile selected to be written on
+//let numberSelected = null; //digits selected on screen to write in tile
+//let tileSelected = null; //tile selected to be written on
+
+
 let counter;
 
 const baseBoard = [
@@ -18,14 +20,16 @@ const baseBoard = [
 
 const numArray = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+
+// Shuffle function returns array
 const shuffle = array => {
-    let newArray = [...array];
+    let newArray = [...array]; //spreads array elements into newArray
 
-    for ( let i = newArray.length - 1; i > 0; i-- ) {
+    for ( let i = newArray.length - 1; i > 0; i-- ) { // i = newArray.length - 1 makes the loop start with its last element
 
-        const j = Math.floor( Math.random() * ( i + 1 ) );
+        const j = Math.floor( Math.random() * ( i + 1 ) ); // random index between 0 and i
 
-        [ newArray[i], newArray[j] ] = [ newArray[j], newArray[i] ];
+        [ newArray[i], newArray[j] ] = [ newArray[j], newArray[i] ]; // assign j to i & i to j in newArray
     }
 
     return newArray;
@@ -33,15 +37,21 @@ const shuffle = array => {
 
 console.log(shuffle(numArray));
 
+
+// board = sudoku board generated 
+// emptyCell = emptyCell Object with rowIndex and colIndex 
+// num = from shuffled array 
+
 const rowSafe = (board, emptyCell, num) => {
-    return board[ emptyCell.rowIndex ].indexOf(num) == -1; // if -1 then value not found
+    return board[ emptyCell.rowIndex ].indexOf(num) == -1; // if -1 then value not found and return false
 }
 
 const columnSafe = (board, emptyCell, num) => {
-    return !board.some(row => row[ emptyCell.colIndex ] == num);
+    return !board.some(row => row[ emptyCell.colIndex ] == num); // .some : iterates over each row in board & we use arrow as callback function for each row we check if emptyCell == num
 }
 
 const boxSafe = (board, emptyCell, num) => {
+    // eahc row and column start at 0, 3 or 6
     boxStartRow = emptyCell.rowIndex - (emptyCell.rowIndex % 3);
     boxStartColumn = emptyCell.colIndex - (emptyCell.colIndex % 3);
 
@@ -49,7 +59,8 @@ const boxSafe = (board, emptyCell, num) => {
 
     for (boxRow of [0, 1, 2]) {
         for (boxCol of [0, 1, 2]) {
-            if (board[boxStartRow + boxRow][boxStartColumn + boxCol] == num) {
+
+            if (board[boxStartRow + boxRow][boxStartColumn + boxCol] == num) { // board[row : array][column : element]
                 safe = false;
             }
         }
@@ -57,6 +68,7 @@ const boxSafe = (board, emptyCell, num) => {
     return safe;
 }
 
+// returns true if all returned true, else returns false
 const safeToPlace = (board, emptyCell, num) => {
     return rowSafe(board, emptyCell, num) && columnSafe(board, emptyCell, num) && boxSafe(board, emptyCell, num);
 }
@@ -68,96 +80,71 @@ const nextEmptyCell = board => {
     };
 
     board.forEach( (row, rowIndex) => {
-        if ( emptyCell.colIndex !== '') return; //key already filled
+        if ( emptyCell.colIndex !== '') return; //check if cell already filled
 
-        let firstZero = row.find( col => col === 0);
+        let firstZero = row.find( col => col === 0); // this look through row array for first occurence of 0
 
-        if ( firstZero === undefined) return; //no zero, go to next row
+        if ( firstZero === undefined) return; //no zero, row completed, go to next row
 
+        // if zero is found : 
         emptyCell.rowIndex = rowIndex;
         emptyCell.colIndex = row.indexOf(firstZero);
     });
 
-    if ( emptyCell.colIndex !== '') return emptyCell;
-    return false;
+    if ( emptyCell.colIndex !== '') return emptyCell; // empty cell found and is returned
+    return false; // all cells filled
 };
 
 const fillBoard = baseBoard => {
-    const emptyCell = nextEmptyCell(baseBoard);
+    const emptyCell = nextEmptyCell(baseBoard); // returns false or emptyCell with row and col value
+    console.log(emptyCell);
 
-    if(!emptyCell) return baseBoard;
+    if(!emptyCell) return baseBoard; // board filled
 
     for (num of shuffle(numArray)) {
         counter++
-
         if (counter > 20_000_000) throw new Error ("Recursion Timeout");
 
         if (safeToPlace(baseBoard, emptyCell, num)) {
+
             baseBoard[ emptyCell.rowIndex ][ emptyCell.colIndex] = num;
 
-            if (fillBoard(baseBoard)) return baseBoard;
+            if (fillBoard(baseBoard)) return baseBoard; // recursive call, if solution found return baseBoards
 
+            // recursive call failed then reset value to 0
             baseBoard[ emptyCell.rowIndex][ emptyCell.colIndex] = 0;
         }
     }
 
-    return false;
+    return false; // recursive call failed for all numbers, paths not ok, no valid solution
 }
 
 const newSolvedBoard = _ => {
     const newBoard = baseBoard.map(row => row.slice());
 
     fillBoard(newBoard);
-    console.log(newBoard)
+    console.log(newBoard);
     return newBoard;
 }
-newSolvedBoard();
 
 
-const createBoard = () => {
+const createBoard = (board) => {
 
     const game = document.getElementById('board');
     
-    
-    const board = [];
-    
-    
-    
-    for (let i = 1; i <= 9; i++) {
-        
-        let row = [];
-        for (let j = 1; j <= 9; j++) {
-            const digits = new Set(); 
-            let numberText = null;
-            while(digits.size < 9 ){
-                const randomNumber = Math.ceil(Math.random() * 9);
-                digits.add(randomNumber);
-            }
-            for(const id of digits) {
-                const index = id - 1;
-                if(index >= 0 && index < 9) {
-                    numberText = id;
-                }
-            }
+    board.forEach( (row, rowIndex) => {
+
+        row.forEach( col => {
 
             const number = document.createElement('div');
             number.setAttribute('class', 'tile');
-            number.setAttribute('id', i);
-            number.innerText = numberText;
+            number.setAttribute('id', rowIndex+'-'+col);
+            number.innerText = col;
         
-            
             game.appendChild(number);
-            row.push(numberText);
-            // rows.push(number.innerText);
-            //console.log(digits);
-            // digits.clear();
-        }
-        board.push(row);
-        row = [];
-    }
-    
-    console.log(board);
-    
+        });
+    });
+
     return board;
     //once level is selected and genrerat a board is clicked, radio button = disabled
 }
@@ -229,12 +216,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // createBoard();
+    createBoard(newSolvedBoard());
+    newSolvedBoard();
     
     
-    validateBoard(createBoard());
+    
+    //validateBoard(createBoard());
 
-    console.log(validateBoard(createBoard()));
+    //console.log(validateBoard(createBoard()));
 
 
 })
