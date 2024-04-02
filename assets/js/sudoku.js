@@ -262,8 +262,92 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(numberSelected);
     }))
 
+    const newStartingBoard = (holes) => {
+        try {
+            counter = 0;
+            numberSelected = null;
+            tileSelected = null;
+            let solvedBoard = newSolvedBoard(game);
+            let [removedValues, baseBoard] = removeValue( solvedBoard.map( row => row.slice()), holes); // not working
+            
+            return [removedValues, baseBoard, solvedBoard];
+        } catch (error) {
+            console.log(error);
+            return newStartingBoard(holes);
+        }
+    }
 
+    newStartingBoard();
 
+    const divs = Array.from(document.getElementsByClassName('tile'));
+    
+    divs.forEach( div => div.addEventListener('click', (event) => {
+        console.log(event.target.getAttribute('class'));
+
+        if(!event.target.classList.contains('solved')) {
+            event.target.innerText = numberSelected;
+        }
+    }))
+
+    const validateButton = document.getElementById('validateButton');
+    const validateBoard = (board) => {
+        const rowSet = new Set();
+        const columnSet = new Set();
+        const boxSet = new Set();
+
+        for (let i = 0; i < board.length; i++) {
+            const row = board[i];
+            
+            for (let j = 0; j< row.length; j++) {
+                const rowNumber = row[j];
+                const columnNumber = board[j][i];
+                const boxNumber = board[3 * Math.floor(i / 3) + Math.floor(j / 3)][(i * 3) % 9 + (j % 3)];
+                
+                
+                if(rowNumber !== '.') {
+                    if (rowSet.has(rowNumber)) return false;
+                    rowSet.add(rowNumber);
+                }
+                
+                if(columnNumber !== '.') {
+                    if(columnSet.has(columnNumber)) return false;
+                    columnSet.add(columnNumber);
+                }
+                
+                if(boxNumber !== '.') {
+                    if(boxSet.has(boxNumber)) return false;
+                    boxSet.add(boxNumber);
+                }
+            }
+            
+            rowSet.clear();
+            columnSet.clear();
+            boxSet.clear();
+        }
+        alert('Won');
+        return true;
+    }
+    const userBoard = [];
+
+    validateButton.addEventListener('click', () => {
+
+        if (divs.some( div => div.innerText == '')) {
+            console.log('not completed');
+            return false;
+        }
+
+        for (let i = 0; i < divs.length; i += 9) {
+            const userRow = [];
+
+            for (let j = i; j < i + 9; j++) {
+
+                let divValue = parseInt(divs[j].innerText);
+                userRow.push(divValue);
+            }
+            userBoard.push(userRow);
+        }
+        validateBoard(userBoard);
+    })
 
 
     //once level is selected and genrerat a board is clicked, radio button = disabled
@@ -288,69 +372,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // const solvedBoard = newSolvedBoard();
     //those will be use when generating board & validating board
-    // const validateBoard = (board) => {
-    //     const rowSet = new Set();
-    //     const columnSet = new Set();
-    //     const boxSet = new Set();
-
-    //     for (let i = 0; i < board.length; i++) {
-    //         const row = board[i];
-            
-    //         for (let j = 0; j< row.length; j++) {
-    //             const rowNumber = row[j];
-    //             const columnNumber = board[j][i];
-    //             const boxNumber = board[3 * Math.floor(i / 3) + Math.floor(j / 3)][(i * 3) % 9 + (j % 3)];
-                
-                
-    //             if(rowNumber !== '.') {
-    //                 if (rowSet.has(rowNumber)) return false;
-    //                 rowSet.add(rowNumber);
-    //             }
-                
-    //             if(columnNumber !== '.') {
-    //                 if(columnSet.has(columnNumber)) return false;
-    //                 columnSet.add(columnNumber);
-    //             }
-                
-    //             if(boxNumber !== '.') {
-    //                 if(boxSet.has(boxNumber)) return false;
-    //                 boxSet.add(boxNumber);
-    //             }
-    //         }
-            
-    //         rowSet.clear();
-    //         columnSet.clear();
-    //         boxSet.clear();
-    //     }
-        
-    //     return true;
-    // }
     
-    
-    const newStartingBoard = (holes) => {
-        try {
-            counter = 0;
-            numberSelected = null;
-            tileSelected = null;
-            let solvedBoard = newSolvedBoard(game);
-            let [removedValues, baseBoard] = removeValue( solvedBoard.map( row => row.slice()), holes); // not working
-            
-            return [removedValues, baseBoard, solvedBoard];
-        } catch (error) {
-            console.log(error);
-            return newStartingBoard(holes);
-        }
-    }
-
-    newStartingBoard(60);
-
-
-    const divs = Array.from(document.getElementsByClassName('tile'));
-    
-    divs.forEach( div => div.addEventListener('click', (event) => {
-        console.log(event.target);
-        event.target.innerText = numberSelected;
-    }))
 })
 
 
