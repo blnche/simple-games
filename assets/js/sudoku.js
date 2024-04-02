@@ -35,9 +35,6 @@ const shuffle = array => {
     return newArray;
 }
 
-console.log(shuffle(numArray));
-
-
 // board = sudoku board generated 
 // emptyCell = emptyCell Object with rowIndex and colIndex 
 // num = from shuffled array 
@@ -97,7 +94,6 @@ const nextEmptyCell = board => {
 
 const fillBoard = baseBoard => {
     const emptyCell = nextEmptyCell(baseBoard); // returns false or emptyCell with row and col value
-    console.log(emptyCell);
 
     if(!emptyCell) return baseBoard; // board filled
 
@@ -119,20 +115,16 @@ const fillBoard = baseBoard => {
     return false; // recursive call failed for all numbers, paths not ok, no valid solution
 }
 
+// creates board with valid solution
 const newSolvedBoard = _ => {
     const newBoard = baseBoard.map(row => row.slice());
 
     fillBoard(newBoard);
-    console.log(newBoard);
-    return newBoard;
-}
 
-
-const createBoard = (board) => {
-
+    // attributes each element of board to game section
     const game = document.getElementById('board');
     
-    board.forEach( (row, rowIndex) => {
+    newBoard.forEach( (row, rowIndex) => {
 
         row.forEach( col => {
 
@@ -144,10 +136,11 @@ const createBoard = (board) => {
             game.appendChild(number);
         });
     });
-
-    return board;
-    //once level is selected and genrerat a board is clicked, radio button = disabled
+    
+    return newBoard;
 }
+
+
 
 //those will be use when generating board & validating board
 const validateBoard = (board) => {
@@ -157,50 +150,48 @@ const validateBoard = (board) => {
 
     for (let i = 0; i < board.length; i++) {
         const row = board[i];
-
+        
         for (let j = 0; j< row.length; j++) {
             const rowNumber = row[j];
             const columnNumber = board[j][i];
             const boxNumber = board[3 * Math.floor(i / 3) + Math.floor(j / 3)][(i * 3) % 9 + (j % 3)];
-
+            
             
             if(rowNumber !== '.') {
                 if (rowSet.has(rowNumber)) return false;
                 rowSet.add(rowNumber);
             }
-
+            
             if(columnNumber !== '.') {
                 if(columnSet.has(columnNumber)) return false;
                 columnSet.add(columnNumber);
             }
-
+            
             if(boxNumber !== '.') {
                 if(boxSet.has(boxNumber)) return false;
                 boxSet.add(boxNumber);
             }
         }
-
+        
         rowSet.clear();
         columnSet.clear();
         boxSet.clear();
     }
-
+    
     return true;
 }
 
 
 
-//number shown at startof the game in a Set
-const revealed = null;
-
 window.addEventListener('DOMContentLoaded', () => {
-
-
+    
+    //once level is selected and genrerat a board is clicked, radio button = disabled
+    
     
     // const levelSelector = () => {
-    //     const levels = document.getElementsByName('level');
-
-    //     levels.forEach(level => level.addEventListener('click', (event) => {
+        //     const levels = document.getElementsByName('level');
+        
+        //     levels.forEach(level => level.addEventListener('click', (event) => {
     
     //         return event.target.id;
     //     }));
@@ -214,16 +205,6 @@ window.addEventListener('DOMContentLoaded', () => {
     //         levelSelected = event.target.id;
     //     }));
 
-
-
-    createBoard(newSolvedBoard());
-    newSolvedBoard();
-    
-    
-    
-    //validateBoard(createBoard());
-
-    //console.log(validateBoard(createBoard()));
-
-
+    const solvedBoard = newSolvedBoard();
+    console.log(validateBoard(solvedBoard));
 })
