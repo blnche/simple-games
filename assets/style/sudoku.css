@@ -12,6 +12,8 @@
     width: 450px;
     height: 50px;
     margin: 1rem;
+
+    display: flex;
 }
 
 .tile {
@@ -22,6 +24,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* .tile:nth-child(3n) {
+    border-right: 1px solid red;
+} */
+
+#board > :nth-child(19) {
+    border-bottom: 1px solid red;
+}
+
+.solved {
+    background-color: var(--light);
 }
 
 .number {

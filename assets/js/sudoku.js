@@ -133,7 +133,8 @@ const newSolvedBoard = game => {
         row.forEach( (col, colIndex) => {
 
             const number = document.createElement('div');
-            number.setAttribute('class', 'tile');
+            number.classList.add('class', 'tile');
+            number.classList.add('class', 'solved');
             number.setAttribute('id', rowIndex+'-'+colIndex);
             number.innerText = col;
         
@@ -177,6 +178,7 @@ const removeValue = (baseBoard, holes) => {
 
             if (div.getAttribute('id') == `${value.rowIndex}`+'-'+`${value.colIndex}`) {
                 div.innerText = '';
+                div.classList.remove('solved');
             }
         });
     });
@@ -241,6 +243,28 @@ const emptyCellCoords = (baseBoard) => {
 
 window.addEventListener('DOMContentLoaded', () => {
     const game = document.getElementById('board');
+    const digitsWrapper = document.getElementById('digits');
+    
+    numArray.forEach( num => {
+        const digit = document.createElement('div');
+        digit.setAttribute('class', 'number');
+        digit.setAttribute('value', num);
+        digit.innerText = num;
+
+        digitsWrapper.appendChild(digit);
+    });
+
+    const digits = Array.from(document.getElementsByClassName('number'));
+    
+    digits.forEach( digit => digit.addEventListener('click', (event) => {
+        console.log(event.target.getAttribute('value'));
+        numberSelected = parseInt(event.target.getAttribute('value'));
+        console.log(numberSelected);
+    }))
+
+
+
+
 
     //once level is selected and genrerat a board is clicked, radio button = disabled
     
@@ -306,6 +330,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const newStartingBoard = (holes) => {
         try {
             counter = 0;
+            numberSelected = null;
+            tileSelected = null;
             let solvedBoard = newSolvedBoard(game);
             let [removedValues, baseBoard] = removeValue( solvedBoard.map( row => row.slice()), holes); // not working
             
@@ -317,6 +343,14 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     newStartingBoard(60);
+
+
+    const divs = Array.from(document.getElementsByClassName('tile'));
+    
+    divs.forEach( div => div.addEventListener('click', (event) => {
+        console.log(event.target);
+        event.target.innerText = numberSelected;
+    }))
 })
 
 
