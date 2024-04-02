@@ -277,7 +277,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    newStartingBoard();
+    newStartingBoard(40);
 
     const divs = Array.from(document.getElementsByClassName('tile'));
     
@@ -332,7 +332,7 @@ window.addEventListener('DOMContentLoaded', () => {
     validateButton.addEventListener('click', () => {
 
         if (divs.some( div => div.innerText == '')) {
-            console.log('not completed');
+            alert('Board not completed');
             return false;
         }
 
