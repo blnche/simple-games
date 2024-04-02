@@ -1,0 +1,64 @@
+#board {
+    width: 450px;
+    height: 450px;
+    margin: 1rem;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+}
+
+#digits {
+    background-color: var(--background-accent);
+    width: 450px;
+    height: 50px;
+    margin: 1rem;
+
+    display: flex;
+}
+
+.tile {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--light);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5rem;
+}
+
+/* .tile:nth-child(3n) {
+    border-right: 1px solid red;
+} */
+
+.tile:nth-child(27n + 28),
+.tile:nth-child(27n + 29),
+.tile:nth-child(27n + 30),
+.tile:nth-child(27n + 31),
+.tile:nth-child(27n + 32),
+.tile:nth-child(27n + 33),
+.tile:nth-child(27n + 34),
+.tile:nth-child(27n + 35),
+.tile:nth-child(27n + 36) {
+  margin-top: 3px;
+}
+
+.tile:nth-child(3n):not(:nth-child(9n)) {
+    margin-right: 3px;
+}   
+
+.solved {
+    background-color: var(--light);
+}
+
+.number {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--dark);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5rem;
+}
