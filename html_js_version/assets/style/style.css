@@ -1,0 +1,43 @@
+@import "colors.css";
+@import "memoryGame.css";
+@import "sudoku.css";
+@import "button.css";
+@import "nav.css";
+
+@font-face {
+    font-family: "Animal Crossing";
+    src: url('../fonts/Animal-Crossing-Wild-World.ttf');
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    max-width: 80vw;
+    min-height: 98vh;
+    margin: 0 auto;
+    padding: 1rem;
+
+    background-color: var(--background);
+    background-image:  linear-gradient(
+        var(--background-accent-2) 50%,
+        var(--background-accent) 50%
+    ), linear-gradient(
+        var(--background-accent) 50%,
+        var(--background-accent-2) 50%
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 30px;
+    background-position: top left, bottom left;
+    
+    font-family: "Animal Crossing";
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}

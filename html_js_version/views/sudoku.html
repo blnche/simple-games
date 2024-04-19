@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games</title>
+    <link rel="stylesheet" href="../assets/style/style.css">
+    <script src="../assets/js/sudoku.js"></script>
+    <script type="module" src="../assets/js/main.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Sudoku</h1>
+        <p id="scoreboard"></p>
+        <form id="levelSelector">
+            <fieldset>
+                <legend>Select a difficulty level : </legend>
+                <input type="radio" name="level" id="easy">
+                <label for="easy">easy</label>
+                <input type="radio" name="level" id="normal">
+                <label for="normal">normal</label>
+                <input type="radio" name="level" id="hard">
+                <label for="hard">hard</label>
+            </fieldset>
+        </form>
+        <button class="navButton" id="toggleNavBtn">
+            <img src="../assets/images/NH-Trees-cherry-blossom_tree.webp" alt="">
+        </button>
+        <nav id="nav">
+            <ul>
+                <li>
+                    <a href="memoryGame.html">Memory Game</a>
+
+                </li>
+                <li><a href="sudoku.html">Sudoku</a></li>
+                <li>
+                    <a href="../index.html">Games</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="board"></section>
+        <section id="digits"></section>
+
+        <button id="validateButton">Validate</button>
+    </main>
+    <footer>
+        <p>Made by Blanche Peltier.</p>
+    </footer>
+</body>
+</html>
