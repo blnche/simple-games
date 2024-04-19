@@ -1,0 +1,126 @@
+import { Button, Card, Divider, Flex, Space } from 'antd';
+import styles from '../../../styles/sudoku.module.css'
+
+export default function Page() {
+    return (
+        <Space direction='vertical' style={{marginInline:'5rem', display:'flex', flexDirection:'column'}}>
+            <h2>Sudoku</h2>
+
+            <Card>
+                <section id="board" style={{display:'grid', gridTemplateColumns: 'repeat(9, 1fr)'}}>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                        <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                </section>
+                <Divider orientation='center'> Pick a number to place</Divider>
+                <Flex 
+                    id="digits"
+                    justify='space-evenly'
+                    align='center'
+                >
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                    <p>Test</p>
+                </Flex>
+            </Card>
+            <Space style={{display: 'flex', justifyContent:'center'}}>
+                <Button 
+                    id="validateButton"
+                    type='primary'
+                >
+                    Validate
+                </Button>
+                <Button 
+                    id="resetButton"
+                    type='default'
+                >
+                    Reset
+                </Button>
+            </Space>
+        </Space>
+    )
+}
