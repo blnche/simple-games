@@ -3,10 +3,10 @@ import styles from '../../../styles/sudoku.module.css'
 
 export default function Page() {
     return (
-        <Space direction='vertical' style={{marginInline:'5rem', display:'flex', flexDirection:'column'}}>
+        <section direction='vertical' className='md:w-96'>
             <h2>Sudoku</h2>
 
-            <Card>
+            <section>
                 <section id="board" style={{display:'grid', gridTemplateColumns: 'repeat(9, 1fr)'}}>
                     <p>Test</p>
                     <p>Test</p>
@@ -90,37 +90,37 @@ export default function Page() {
                     <p>Test</p>
                     <p>Test</p>
                 </section>
-                <Divider orientation='center'> Pick a number to place</Divider>
-                <Flex 
+                <div className='divider divider-secondary'> Pick a number to place</div>
+                <section 
                     id="digits"
                     justify='space-evenly'
                     align='center'
                 >
-                    <p>Test</p>
-                    <p>Test</p>
-                    <p>Test</p>
-                    <p>Test</p>
-                    <p>Test</p>
-                    <p>Test</p>
-                    <p>Test</p>
-                    <p>Test</p>
-                    <p>Test</p>
-                </Flex>
-            </Card>
-            <Space style={{display: 'flex', justifyContent:'center'}}>
-                <Button 
+                    <p className='kbd'>1</p>
+                    <p className='kbd'>2</p>
+                    <p className='kbd'>3</p>
+                    <p className='kbd'>4</p>
+                    <p className='kbd'>5</p>
+                    <p className='kbd'>6</p>
+                    <p className='kbd'>7</p>
+                    <p className='kbd'>8</p>
+                    <p className='kbd'>9</p>
+                </section>
+            </section>
+            <section style={{display: 'flex', justifyContent:'center'}}>
+                <button 
                     id="validateButton"
-                    type='primary'
+                    className='btn btn-primary'
                 >
                     Validate
-                </Button>
-                <Button 
+                </button>
+                <button 
                     id="resetButton"
-                    type='default'
+                    className='btn btn-secondary'
                 >
                     Reset
-                </Button>
-            </Space>
-        </Space>
+                </button>
+            </section>
+        </section>
     )
 }

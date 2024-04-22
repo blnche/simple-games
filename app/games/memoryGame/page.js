@@ -121,14 +121,14 @@ export default function Page() {
 
 
     return (
-        <Space direction='vertical' style={{marginInline:'5rem', display:'flex', flexDirection:'column'}}>
-            <h2>Memory Game</h2>
-            <section className={styles.game}>
+        <section className='h-full flex flex-col space-y-5'>
+            <h2 className='text-xl'>Memory Game</h2>
+            <section className='grid gap-2 grid-cols-4  justify-around h-full'>
                 {villagers.map((villager, index) => {
                     return (
-                        <div key={index} className={styles.card} onClick={clickCard} data-villagername={villager.name}>
-                            <div className={styles.front}>
-                            </div>
+                        <div key={index} className='card bg-base-200' onClick={clickCard} data-villagername={villager.name}>
+                            <div className={styles.front}></div>
+
                             <div className={`${styles.back} ${styles.rotated}`}>
                                 <div className={styles.imgWrapper}>
                                     <img src={villager.image_url} alt={villager.name}/>
@@ -139,7 +139,7 @@ export default function Page() {
                     )
                 })}
             </section>
-
-        </Space>
+            <button className='btn btn-primary'> Reset </button>
+        </section>
     )
 }

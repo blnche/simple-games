@@ -1,8 +1,12 @@
 'use client'
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu } from 'antd';
-import { HomeOutlined, BuildOutlined, DashboardOutlined } from '@ant-design/icons'
+import { Menu, Button } from 'antd';
+import { HomeOutlined, BuildOutlined, DashboardOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
+
+
+
+
 
 const items = [
     {
@@ -35,18 +39,27 @@ const items = [
 ];
 
 export default function Nav() {
-    const [current, setCurrent] = useState('homepage');
-    const onClick = (e) => {
-        setCurrent(e.key);
-    }
 
     return (
-        <Menu 
-         onClick={onClick}
-         selectedKeys={[current]}
-         mode="horizontal"
-         items={items}
-        />
+        <nav className='flex-none'>
+            <ul role='list' className='menu menu-horizontal px-1'>
+                <li>
+                    <a href="/"> Homepage </a>
+                </li>
+                <li>
+                    <a href="/dashboard"> Dashboard </a>
+                </li>
+                <li>
+                    <details>
+                        <summary> Play now </summary>
+                        <ul role='list' className='p-2 bg-base-100 rounded-t-none'>
+                            <li><a href='/games/memoryGame'> Memory Game </a></li>
+                            <li><a href='/games/sudoku'> Sudoku </a></li>
+                        </ul>
+                    </details>
+                </li>
+            </ul>
+        </nav>
     )
 
 }
