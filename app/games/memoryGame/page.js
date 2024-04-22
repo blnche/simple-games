@@ -1,7 +1,6 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { Space, Card } from 'antd';
-import styles from '../../../styles/memoryGame.module.css'
+import React, { useEffect, useState } from 'react';
+import styles from '../../../styles/memoryGame.module.css';
 
 export default function Page() {
     const [villagers, setVillagers] = useState([]);
@@ -10,36 +9,36 @@ export default function Page() {
     const [firstPick, setFirstPick] = useState(null);
     const [matches, setMatches] = useState(0);
 
-    useEffect( () => {
-        const loadVillager = async () => {
-            try {
-                const response = await fetchVillagers();
-                const data = await response.json();
-
-                const randomIds = new Set();
-
-                while(randomIds.size < 8) {
-                    const randomNumber = Math.ceil(Math.random() * 150);
-                    randomIds.add(randomNumber);
-                }
-
-                const selectedVillagers = [];
-                for (const id of randomIds) {
-                    const index = id - 1;
-                    if(index >= 0 && index < data.length) {
-                        selectedVillagers.push(data[index])
-                    }
-                }
-
-                setVillagers([...selectedVillagers, ...selectedVillagers].sort(_ => Math.random() - 0.5));
-                
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        
+    useEffect( () => {    
         loadVillager();
     }, []);
+
+    const loadVillager = async () => {
+        try {
+            const response = await fetchVillagers();
+            const data = await response.json();
+
+            const randomIds = new Set();
+
+            while(randomIds.size < 8) {
+                const randomNumber = Math.ceil(Math.random() * 150);
+                randomIds.add(randomNumber);
+            }
+
+            const selectedVillagers = [];
+            for (const id of randomIds) {
+                const index = id - 1;
+                if(index >= 0 && index < data.length) {
+                    selectedVillagers.push(data[index])
+                }
+            }
+
+            setVillagers([...selectedVillagers, ...selectedVillagers].sort(_ => Math.random() - 0.5));
+            
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     const fetchVillagers = async () => {
 
@@ -106,27 +105,27 @@ export default function Page() {
         return [front, back];
     };
 
-    // const resetGame = async () => {
-    //     setIsPause(true);
-    //     setFirstPick(null);
-    //     setMatches(0);
+    const resetGame = async () => {
+        setIsPause(false);
+        setFirstPick(null);
+        setMatches(0);
+        setVillagers([]);
 
-    //     try {
+        try {
+            await loadVillager();
             
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }
-
-
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <section className='h-full flex flex-col space-y-5'>
             <h2 className='text-xl'>Memory Game</h2>
-            <section className='grid gap-2 grid-cols-4  justify-around h-full'>
+            <section key={villagers.length} className='grid gap-2 grid-cols-4  justify-around h-full'>
                 {villagers.map((villager, index) => {
                     return (
-                        <div key={index} className='card bg-base-200' onClick={clickCard} data-villagername={villager.name}>
+                        <div key={index} className='card bg-base-200 shadow-md' onClick={clickCard} data-villagername={villager.name}>
                             <div className={styles.front}></div>
 
                             <div className={`${styles.back} ${styles.rotated}`}>
@@ -139,7 +138,7 @@ export default function Page() {
                     )
                 })}
             </section>
-            <button className='btn btn-primary'> Reset </button>
+            <button className='btn btn-primary' onClick={resetGame}> Reset </button>
         </section>
     )
 }

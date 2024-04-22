@@ -7,6 +7,14 @@
     font-family: "Animal Crossing";
     src: url('../public/fonts/Animal-Crossing-Wild-World.ttf');
 }
+@font-face {
+    font-family: 'Seurat';
+    src: url('../public/fonts/SeuratProB.otf');
+}
+@font-face {
+    font-family: 'Rodin Bokutoh';
+    src: url('../public/fonts/RodinBokutohProEB.otf');
+}
 
 /* html, body {
     margin: 0;
@@ -36,7 +44,15 @@ body {
     background-size: 100% 30px;
     background-position: top left, bottom left; */
     
-    font-family: "Animal Crossing";
-    text-transform: uppercase;
+    font-family: "Seurat";
     letter-spacing: 0.05rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Rodin Bokutoh';
 }
