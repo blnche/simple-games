@@ -16,15 +16,15 @@
 }
 
 .tile {
-    width: 10vw;
-    height: 10vw;
-    border: 1px solid var(--light);
+    /* width: 10vw;
+    height: 10vw; */
+    /* border: 1px solid var(--light); */
 
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
 
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
 }
 
 /* .tile:nth-child(3n) {
@@ -44,7 +44,11 @@
 }
 
 .tile:nth-child(3n):not(:nth-child(9n)) {
-    margin-right: 3px;
+    @apply border-r-2 border-yellow-900 mr-4;
+}   
+
+.row:nth-child(3n):not(:nth-child(9n)) {
+    @apply border-b-2 border-yellow-900 pb-2 mb-4;
 }   
 
 .solved {
@@ -75,7 +79,7 @@
     }
 
     .tile {
-        width: 48px;
-        height: 48px;
+        /* width: 48px;
+        height: 48px; */
     }
 }
