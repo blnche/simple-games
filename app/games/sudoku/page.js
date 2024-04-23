@@ -33,7 +33,7 @@ export default function Page() {
     }, []);
 
     useEffect(() => {
-        removeValue(solvedBoard, 2);
+        removeValue(solvedBoard, 45);
     }, [solvedBoard]);
 
     useEffect(() => {
