@@ -8,16 +8,17 @@ import styles from '../../../styles/sudoku.module.css';
 export default function Page() {
 
     const [baseBoard, setBaseBoard] = useState([
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [{ value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }],
+        [{ value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }],
+        [{ value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }],
+        [{ value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }],
+        [{ value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }],
+        [{ value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }],
+        [{ value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }],
+        [{ value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }],
+        [{ value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }, { value: 0, initiallyGenerated: false }]
     ]);
+    
     const [numberSelected, setNumberSelected] = useState(null);
     const [tileSelected, setTileSelected] = useState(null);
     const [counter, setCounter] = useState(0);
@@ -30,7 +31,7 @@ export default function Page() {
         newStartingBoard();
     }, []);
     useEffect(() => {
-        removeValue(solvedBoard, 45);
+        removeValue(solvedBoard, 0);
     }, [solvedBoard]);
 
     const shuffle = array => {
@@ -49,11 +50,11 @@ export default function Page() {
     };
 
     const rowSafe = (board, emptyCell, num) => {
-        return board[emptyCell.rowIndex].indexOf(num) === -1;
+        return board[emptyCell.rowIndex].every(cell => cell.value !== num);
     };
 
     const columnSafe = (board, emptyCell, num) => {
-        return !board.some(row => row[emptyCell.colIndex] === num);
+        return !board.some(row => row[emptyCell.colIndex].value === num);
     }
 
     const boxSafe = (board, emptyCell, num) => {
@@ -64,7 +65,8 @@ export default function Page() {
 
         for(const boxRow of [0, 1, 2]) {
             for(const boxCol of [0, 1, 2]) {
-                if( board[boxStartRow + boxRow][boxStartColumn + boxCol] === num) {
+                const cell = board[boxStartRow + boxRow][boxStartColumn + boxCol];
+                if( cell.value === num) {
                     safe = false;
                 };
             };
@@ -84,13 +86,18 @@ export default function Page() {
         };
 
         board.forEach((row, rowIndex) => {
+            // console.log(row);
             if(emptyCell.colIndex !== '') return;
 
-            let firstZero = row.find(col => col === 0);
-            if(firstZero === undefined) return;
+            row.forEach((cell, colIndex) => {
+                // console.log(cell);
 
-            emptyCell.rowIndex = rowIndex;
-            emptyCell.colIndex = row.indexOf(firstZero);
+                if(cell.value === 0) {
+                    emptyCell.rowIndex = rowIndex;
+                    emptyCell.colIndex = colIndex;
+                }
+            })
+
         });
 
         if( emptyCell.colIndex !== '') return emptyCell;
@@ -99,6 +106,7 @@ export default function Page() {
 
     const fillBoard = baseBoard => {
         const emptyCell = nextEmptyCell(baseBoard);
+        console.log(emptyCell);
         if(!emptyCell) return baseBoard;
 
         for(const num of shuffle(range(1,9))) {
@@ -106,11 +114,18 @@ export default function Page() {
             if( counter > 20_000_000) throw new Error('Recursion Timeout');
 
             if(safeToPlace(baseBoard, emptyCell, num)) {
-                baseBoard[emptyCell.rowIndex][emptyCell.colIndex] = num;
-
+                baseBoard[emptyCell.rowIndex][emptyCell.colIndex] = {
+                    value: num,
+                    initiallyGenerated: true,
+                };
+                console.log(baseBoard)
                 if(fillBoard(baseBoard)) return baseBoard;
+                console.log(baseBoard)
 
-                baseBoard[emptyCell.rowIndex][emptyCell.colIndex] = 0;
+                baseBoard[emptyCell.rowIndex][emptyCell.colIndex] = {
+                    value: 0,
+                    initiallyGenerated: false,
+                };
             };
         };
         return false;
@@ -118,7 +133,7 @@ export default function Page() {
 
     const newSolvedBoard = () => {
 
-        const newBoard = baseBoard.map(row => row.slice());
+        const newBoard = baseBoard.map(row => row.map(cell => ({...cell, initiallyGenerated:true})));
 
         fillBoard(newBoard);
         setSolvedBoard(newBoard);
@@ -148,12 +163,18 @@ export default function Page() {
                     val: solvedBoard[ randomRowIndex ][ randomColIndex ]
                 });
                 
-                solvedBoard[ randomRowIndex ][ randomColIndex ] = 0;
+                solvedBoard[ randomRowIndex ][ randomColIndex ] = {
+                    value: 0,
+                    initiallyGenerated: false,
+                };
         
-                const proposedBoard = solvedBoard.map( row => row.slice());
+                const proposedBoard = solvedBoard.map( row => row.map((cell) => ({...cell})));
         
                 if (!fillBoard(proposedBoard)) {
-                    solvedBoard[ randomRowIndex ][ randomColIndex ] = removedValues.pop().val;
+                    solvedBoard[ randomRowIndex ][ randomColIndex ] = {
+                        value: removedValues.pop().val,
+                        initiallyGenerated: true
+                    }
                 }
             }
             // console.log(removedValues)
@@ -188,7 +209,10 @@ export default function Page() {
             const newBoard = [...solvedBoard];
             console.log(newBoard)
             console.log(newBoard[rowIndex][colIndex])
-            newBoard[rowIndex][colIndex] = numberSelected;
+            newBoard[rowIndex][colIndex] = {
+                value: numberSelected,
+                initiallyGenerated: false
+            };
             console.log(newBoard);
 
             setUserBoard(newBoard);
@@ -248,15 +272,28 @@ export default function Page() {
     }
     
     return (
-        <div direction='vertical' className='md:w-96'>
+        <div className='md:w-96 flex flex-col items-center'>
             <h2>Sudoku</h2>
 
-            <div className='sudoku-board my-4 h-full flex flex-col'>
+            <div className='sudoku-board my-4 h-full flex flex-col kbd w-fit p-1'>
                 {solvedBoard.map((row, rowIndex) => (
-                    <div key={rowIndex} className='row h-full flex justify-center'>
+                    <div key={rowIndex} className={`${styles.row} h-full flex justify-center`}>
                         {row.map((cell, colIndex) => (
-                            <div id={`${rowIndex}-${colIndex}`} key={`${rowIndex}-${colIndex}`} className='h-8 w-8 border flex justify-center cursor-pointer cell' onClick={() => handleTileClick(rowIndex, colIndex)}>
-                                {cell !== 0 && cell}
+                            <div 
+                                id={`${rowIndex}-${colIndex}`} 
+                                key={`${rowIndex}-${colIndex}`} 
+                                className={
+                                    `h-9 w-9 flex justify-center items-center ${styles.tile} 
+                                    ${!cell.initiallyGenerated ? 'hover:bg-base-300 cursor-pointer' : ''}
+                                    ${cell.initiallyGenerated ? 'bg-neutral text-secondary' : ''}`
+                                } 
+                                onClick={() => {
+                                    if (!cell.initiallyGenerated){
+                                        handleTileClick(rowIndex, colIndex)
+                                    }
+                                }}
+                            >
+                                {cell.value !== 0 && cell.value}
                             </div>
                         ))}
                     </div>

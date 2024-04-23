@@ -8,7 +8,7 @@ export const metadata = {
 export default function RootLayout ({ children }) {
 
     return (
-        <html lang="en" data-theme='animalCrossing'>
+        <html lang="en" data-theme='retro'>
             <body className='h-screen flex flex-col justify-between'> 
                 <header className='h-20 navbar bg-base-100'>
                     <h1 className='flex-1'><a href='/' className='btn btn-ghost text-xl'>Mini-Games</a></h1>
