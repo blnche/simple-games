@@ -25,14 +25,31 @@ export default function Page() {
     const [solvedBoard, setSolvedBoard] = useState([]);
     const [userBoard, setUserBoard] = useState([]);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [maxNumber, setMaxNumber] = useState([]);
     
     
     useEffect(() => {
         newStartingBoard();
     }, []);
+
     useEffect(() => {
         removeValue(solvedBoard, 2);
     }, [solvedBoard]);
+
+    useEffect(() => {
+        const numberCounts = new Array(10).fill(0);
+
+        userBoard.forEach(row => {
+            row.forEach(cell => {
+                if(cell.value >= 1 && cell.value <= 9) {
+                    numberCounts[cell.value]++;
+                }
+            })
+        })
+
+        const maxNumber = numberCounts.map((count, index) => (count === 9 ? index : null));
+        setMaxNumber(maxNumber);
+    }, [userBoard])
 
     const shuffle = array => {
         let newArray = [...array];
@@ -137,7 +154,7 @@ export default function Page() {
 
         fillBoard(newBoard);
         setSolvedBoard(newBoard);
-
+        setUserBoard(newBoard);
         return newBoard;
     };
 
@@ -233,9 +250,9 @@ export default function Page() {
             const row = userBoard[i];
 
             for(let j = 0; j < row.length; j++) {
-                const rowNumber = row[j];
-                const columnNumber = userBoard[j][i];
-                const boxNumber = userBoard[3 * Math.floor(i / 3) + Math.floor(j / 3)][(i * 3) % 9 + (j % 3)];
+                const rowNumber = row[j].value;
+                const columnNumber = userBoard[j][i].value;
+                const boxNumber = userBoard[3 * Math.floor(i / 3) + Math.floor(j / 3)][(i * 3) % 9 + (j % 3)].value;
 
                 if(rowNumber !== '.') {
                     if (rowSet.has(rowNumber)) {
@@ -301,7 +318,14 @@ export default function Page() {
             </div>
             <div className='number-selector my-4 grid grid-cols-5'>
                 {Array.from({length: 9}).map((_, index) => (
-                    <div key={index} className={`m-1 kbd cursor-pointer ${numberSelected === index + 1 ? 'ring-1 ring-neutral' : ''}`} onClick={() => handleNumberSelect(index+1)}>
+                    <div 
+                        key={index} 
+                        className={`
+                            m-1 kbd cursor-pointer 
+                            ${numberSelected === index + 1 ? 'ring-1 ring-neutral' : ''}
+                            ${maxNumber.includes(index+1) ? 'bg-base-300' : ''}
+                        `} 
+                        onClick={() => handleNumberSelect(index+1)}>
                         {index +1}
                     </div>
                 ))}
